@@ -24,8 +24,8 @@ def convert_pc(proceses):
 
 
 def show_process_info(dmemory,name_user):
-    output_str='user{0:<12}, name process{0:<17},data{0:<16}{1:>30}'    
-    print(output_str.format(' ','"u" for update info "c" for exit  '))
+    output_str='user{0:<12}, name process{0:<17},data{0:<16}'    
+    print(output_str.format(' ',))
     for key in dmemory.keys():
         if dmemory[key]!=0:
             print('{0:<16}, {1:<29},{2:<10}KB'.format(
@@ -60,20 +60,25 @@ def print_info_net():
 
 def print_info_cpu():
     info= int(info_cpu()*0.5)
+    print(info,'%')
     print("[",'|'*info,' '*(50-info),']',sep='')
 
+
+def print_menu():
+    print('"u" print info about cpu, \
+    "c" for exit,"i" print info about process, \
+    "n" print info about net, \
+    "a" print all ')
 
 def show_all():
     print_info_cpu()
     print_info_net()
     print_info_process()
+    print_menu()
 
 
 def main():
-    print('"u" print info about cpu, \
-    "c" for exit,"i" print info about process, \
-    "n" print info about net, \
-    "a" print all ')
+    print_menu()
     while(True):
         if  keyboard.is_pressed('c'):
             return
