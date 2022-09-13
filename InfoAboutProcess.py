@@ -5,27 +5,28 @@ import psutil
 
 
 def user_name():
-    info_user = psutil.users()
-    return info_user[0].name
-
+    def wrapper():
+        info_user = psutil.users()
+        return info_user[0].name
+    return wrapper()
 
 def get_proceses():
     return psutil.process_iter()
 
-
-def convert_pc(proceses):
-    dmemory=dict()
-    for process in proceses:
-        memory_info=process.memory_info()
-        if dmemory.get(process.name())==None:
-            dmemory[process.name()]=0
-        dmemory[process.name()]+=memory_info.data
-    return dmemory
-
+def convert_pc(process):
+    def wrapper(proceses):
+        dmemory=dict()
+        for process in proceses:
+            memory_info=process.memory_info()
+            if dmemory.get(process.name())==None:
+                dmemory[process.name()]=0
+            dmemory[process.name()]+=memory_info.data
+        return dmemory
+    return wrapper(process)
 
 def show_process_info(dmemory,name_user):
     output_str='user{0:<12}, name process{0:<17},data{0:<16}'    
-    print(output_str.format(' ',))
+    print(output_str.format(' '))
     for key in dmemory.keys():
         if dmemory[key]!=0:
             print('{0:<16}, {1:<29},{2:<10}KB'.format(
@@ -39,11 +40,11 @@ def show_process_info(dmemory,name_user):
 def print_info_process():
     show_process_info(convert_pc(get_proceses()),user_name())
     
-
 def info_cpu():
-    system_load_all=[x / psutil.cpu_count() * 100 for x in psutil.getloadavg()]
-    return system_load_all[0]
-
+    def wrapper():
+        system_load_all=[x / psutil.cpu_count() * 100 for x in psutil.getloadavg()]
+        return system_load_all[0]
+    return wrapper()
 
 def info_net():
     return psutil.net_io_counters()
