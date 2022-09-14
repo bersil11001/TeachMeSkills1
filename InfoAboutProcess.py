@@ -2,7 +2,7 @@ from os import system
 from time import sleep
 import keyboard
 import psutil
-
+import json
 
 def user_name():
     def wrapper():
@@ -10,8 +10,10 @@ def user_name():
         return info_user[0].name
     return wrapper()
 
+
 def get_proceses():
     return psutil.process_iter()
+
 
 def convert_pc(process):
     def wrapper(proceses):
@@ -24,9 +26,13 @@ def convert_pc(process):
         return dmemory
     return wrapper(process)
 
+
 def show_process_info(dmemory,name_user):
     output_str='user{0:<12}, name process{0:<17},data{0:<16}'    
     print(output_str.format(' '))
+    y = json.dumps(dmemory)
+    with open("sample.json", "w") as outfile:
+        outfile.write(y)
     for key in dmemory.keys():
         if dmemory[key]!=0:
             print('{0:<16}, {1:<29},{2:<10}KB'.format(
@@ -39,6 +45,7 @@ def show_process_info(dmemory,name_user):
 
 def print_info_process():
     show_process_info(convert_pc(get_proceses()),user_name())
+
     
 def info_cpu():
     def wrapper():
@@ -70,6 +77,7 @@ def print_menu():
     "c" for exit,"i" print info about process, \
     "n" print info about net, \
     "a" print all ')
+
 
 def show_all():
     print_info_cpu()
